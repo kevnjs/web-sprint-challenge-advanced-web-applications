@@ -6,35 +6,35 @@ import EditForm from './EditForm';
 import axiosWithAuth from '../utils/axiosWithAuth';
 
 
-const View = (props) => {
+const View = () => {
     const [articles, setArticles] = useState([]);
     const [editing, setEditing] = useState(false);
     const [editId, setEditId] = useState();
     const { push } = useHistory();
 
     useEffect(()=> {
-        props.setLoggedIn(true)
-        axiosWithAuth().get('/articles')
-        .then(resp => setArticles(resp.data))
-        .catch(err => console.log(err))
+        axiosWithAuth()
+            .get('/articles')
+            .then(resp => setArticles(resp.data))
+            .catch(err => console.log(err))
     }, [])
 
     const handleDelete = (id) => {
-        axiosWithAuth().delete(`/articles/${id}`)
-        .then(resp => {
-            setArticles(resp.data)
-            push('/view')
-        })
-        .catch(err => console.log(err))
+        axiosWithAuth()
+            .delete(`/articles/${id}`)
+            .then(resp => {
+                setArticles(resp.data)
+                push('/view')})
+            .catch(err => console.log(err))
     }
 
     const handleEdit = (article) => {
-        axiosWithAuth().put(`/articles/${article.id}`, article)
-        .then(resp =>  {
-            setArticles(resp.data)
-            setEditing(false)
-        })
-        .catch(err => console.log(err))
+        axiosWithAuth()
+            .put(`/articles/${article.id}`, article)
+            .then(resp => {
+                setArticles(resp.data) 
+                setEditing(false)})
+            .catch(err => console.log(err))
     }
 
     const handleEditSelect = (id)=> {
@@ -49,6 +49,7 @@ const View = (props) => {
     return(<ComponentContainer>
         <HeaderContainer>View Articles</HeaderContainer>
         <ContentContainer flexDirection="row">
+
             <ArticleContainer>
                 {
                     articles.map(article => {

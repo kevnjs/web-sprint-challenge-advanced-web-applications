@@ -3,43 +3,32 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router';
 import axios from 'axios';
 
-const Login = ({setLoggedIn}) => {
+const Login = () => {
     const { push } = useHistory()
     const [error, setError] = useState(false)
-    const [form , setForm] = useState({ 
-        username: "",
-        password: ""
-    })
+    const [form , setForm] = useState({ username: "", password: ""})
 
     const onChange = (e) => { 
-        setForm({ 
-            ...form,
-            [e.target.name] : e.target.value
-        })
+    setForm({ ...form, [e.target.name] : e.target.value})
     }
 
     const onFormSubmit = (e) => { 
-        e.preventDefault()
-        axios.post('http://localhost:5000/api/login', form)
-        .then(resp => {
-            localStorage.setItem('token', resp.data.token)
-            push('/view')     
-        })
-        .catch(err => setError(true))
-        .finally(setForm({
-            ...form,
-            username: "",
-            password: ""
-        }))
+        e.preventDefault() 
+        
+        axios
+            .post('http://localhost:5000/api/login', form)
+            .then(resp => {localStorage.setItem('token', resp.data.token); push('/view')})
+            .catch(err => setError(true))
+            .finally(setForm( {...form, username: "", password: "" } ))
     }
 
-    return(<ComponentContainer>
+    return (
+    <ComponentContainer>
         <ModalContainer>
-
             <h1>Welcome to Blogger Pro</h1>
             <h2>Please enter your account information.</h2>
-
             <FormGroup onSubmit={onFormSubmit}>
+
                 <Label>Username</Label>
                 <Input 
                 id="username"
@@ -62,7 +51,6 @@ const Login = ({setLoggedIn}) => {
                 {error && <Error id="error">*The username or password you entered is incorrect</Error>}
                 <Button id="submit">Log In</Button>
             </FormGroup>
-
         </ModalContainer>
     </ComponentContainer>);
 }

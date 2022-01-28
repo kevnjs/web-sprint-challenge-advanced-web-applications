@@ -8,34 +8,24 @@ import Login from './Login';
 import View from './View';
 import Logout from './Logout';
 
+
 const App = () => {
-  const [loggedIn, setLoggedIn] = useState(false)
+  const privateRouteToView = <PrivateRoute exact path="/view" component={View} />
+  const privateRouteToLogout = <PrivateRoute exact path="/logout" component={Logout}/>
+  const routeToLogin1 = <Route exact path="/">  <Login/>  </Route>
+  const routeToLogin2 = <Route exact path="/login">  <Login/>  </Route>
 
   return (
     <AppContainer>
       <BloomHeader/>
-      <Header loggedIn={loggedIn}/>
+      <Header/>
       <RouteContainer>
+
         <Switch>
-          <PrivateRoute 
-          setLoggedIn={setLoggedIn} 
-          path ="/view" 
-          component={View}
-          />
-
-          <Route exact path="/">
-            <Login setLoggedIn={setLoggedIn}/>
-          </Route>  
-
-          <Route exact path="/login">
-            <Login setLoggedIn={setLoggedIn}/>
-          </Route>  
-          
-          <PrivateRoute 
-          exact path="/logout" 
-          setLoggedIn={setLoggedIn}  
-          component={Logout}
-          />
+          {privateRouteToView}
+          {privateRouteToLogout}
+          {routeToLogin1}
+          {routeToLogin2}
         </Switch>  
 
       </RouteContainer>
