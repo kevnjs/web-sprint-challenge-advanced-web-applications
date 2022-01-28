@@ -1,20 +1,43 @@
-import React from 'react';
-import { Route } from "react-router-dom";
+import React, { useState } from 'react';
+import { Route, Switch } from "react-router-dom";
 import styled from 'styled-components';
-
+import PrivateRoute from './PrivateRoute';
 import Header from './Header';
 import BloomHeader from './BloomHeader';
 import Login from './Login';
+import View from './View';
+import Logout from './Logout';
 
 const App = () => {
+  const [loggedIn, setLoggedIn] = useState(false)
+
   return (
     <AppContainer>
       <BloomHeader/>
-      <Header/>
+      <Header loggedIn={loggedIn}/>
       <RouteContainer>
-        <Route exact path="/">
-          <Login/>
-        </Route>          
+        <Switch>
+          <PrivateRoute 
+          setLoggedIn={setLoggedIn} 
+          path ="/view" 
+          component={View}
+          />
+
+          <Route exact path="/">
+            <Login setLoggedIn={setLoggedIn}/>
+          </Route>  
+
+          <Route exact path="/login">
+            <Login setLoggedIn={setLoggedIn}/>
+          </Route>  
+          
+          <PrivateRoute 
+          exact path="/logout" 
+          setLoggedIn={setLoggedIn}  
+          component={Logout}
+          />
+        </Switch>  
+
       </RouteContainer>
     </AppContainer>
   )

@@ -2,14 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const Header = () => {
+const Header = ({loggedIn}) => {
     return(
         <HeaderStyle>
             <p>Blogger Pro</p>
             <MenuStyle>
-                <li><Link to="/">Login</Link></li>
-                <li><Link to="view">View</Link></li>
-                <li><Link to="logout">Logout</Link></li>
+                {!loggedIn && <li><Link to="/">Login</Link></li>}
+                {loggedIn && <li><Link to="/view">View</Link></li>}
+                {loggedIn && <li><Link to="/logout">Logout</Link></li>}
             </MenuStyle>
         </HeaderStyle>
     );

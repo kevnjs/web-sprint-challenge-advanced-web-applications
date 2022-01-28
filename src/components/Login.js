@@ -1,12 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router';
+import axios from 'axios';
 
-const Login = () => {
-    
+const Login = ({setLoggedIn}) => {
+    const { push } = useHistory()
+    const [error, setError] = useState(false)
+    const [form , setForm] = useState({ 
+        username: "",
+        password: ""
+    })
+
+    const onChange = (e) => { 
+        setForm({ 
+            ...form,
+            [e.target.name] : e.target.value
+        })
+    }
+
+    const onFormSubmit = (e) => { 
+        e.preventDefault()
+        axios.post('http://localhost:5000/api/login', form)
+        .then(resp => {
+            localStorage.setItem('token', resp.data.token)
+            push('/view')     
+        })
+        .catch(err => setError(true))
+        .finally(setForm({
+            ...form,
+            username: "",
+            password: ""
+        }))
+    }
+
     return(<ComponentContainer>
         <ModalContainer>
+
             <h1>Welcome to Blogger Pro</h1>
             <h2>Please enter your account information.</h2>
+
+            <FormGroup onSubmit={onFormSubmit}>
+                <Label>Username</Label>
+                <Input 
+                id="username"
+                name="username"
+                placeholder="Enter your username here"
+                type="text"
+                value={form.username}
+                onChange={onChange}
+                />
+                
+                <Label>Password</Label>
+                <Input 
+                id="password"
+                name="password"
+                placeholder="Enter your password here"
+                type="text"
+                value={form.password}
+                onChange={onChange}
+                />
+                {error && <Error id="error">*The username or password you entered is incorrect</Error>}
+                <Button id="submit">Log In</Button>
+            </FormGroup>
+
         </ModalContainer>
     </ComponentContainer>);
 }
@@ -52,6 +108,17 @@ const Input = styled.input`
 `
 
 const Button = styled.button`
+    margin-top: 1.4rem;
     padding:1rem;
     width: 100%;
+    background: #D9A0AC;
+    color: #fff;
+    & :hover {
+        opacity: 0.7;
+    }
 `
+const Error = styled.p`
+    color: red;
+    font-size: 0.75rem;
+    padding: 0;
+ `

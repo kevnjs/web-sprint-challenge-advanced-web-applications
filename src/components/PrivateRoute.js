@@ -1,9 +1,15 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 
-function PrivateRoute() {
-  return (<Route/>);
-}
+function PrivateRoute({component:Component, setLoggedIn}) {
+  if (localStorage.getItem('token')) {
+      return <Route render={()=> <Component setLoggedIn={setLoggedIn}/>} />
+
+  } else {
+      alert("Please Login to continue")
+      return <Redirect to="/"/>
+    }
+  }
 
 export default PrivateRoute;
 
